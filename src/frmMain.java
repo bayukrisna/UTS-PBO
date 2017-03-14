@@ -73,6 +73,7 @@ public class frmMain extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(null);
@@ -268,6 +269,15 @@ public class frmMain extends javax.swing.JFrame {
         jPanel5.add(jLabel5);
         jLabel5.setBounds(260, 330, 70, 50);
 
+        jButton2.setText("DISKON 10%");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+        jPanel5.add(jButton2);
+        jButton2.setBounds(470, 340, 140, 50);
+
         getContentPane().add(jPanel5);
         jPanel5.setBounds(0, 0, 1010, 480);
 
@@ -282,8 +292,8 @@ public class frmMain extends javax.swing.JFrame {
             int a = Integer.parseInt(harga.getText());
             int b = Integer.parseInt(jumbar.getText());
             int total = Integer.parseInt(tot.getText());
-            int hasil = (a*b)+total;
-            String ab = Integer.toString(hasil);
+            int hasil = (a*b);
+            String ab = Integer.toString(hasil+total);
             String SQL = "INSERT INTO tabel_barang VALUES "
                     + "('" + idbar.getText() + "','" 
                     + nama.getText() + "','" 
@@ -331,16 +341,15 @@ public class frmMain extends javax.swing.JFrame {
 
     private void editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editActionPerformed
         int baris = tabel.getSelectedRow();
+        int a = Integer.parseInt(harga.getText());
+            int b = Integer.parseInt(jumbar.getText());
+            int total = Integer.parseInt(tot.getText());
+            int hasil = (a*b);
+            String ab = Integer.toString(hasil+total);
         String id_barang = tabel.getValueAt(baris, 0).toString();       
         if ("".equals(idbar.getText()) || "".equals(nama.getText()) || "".equals(harga.getText()) || "".equals(jumbar.getText()) ) {
             JOptionPane.showMessageDialog(this, "Harap Lengkapi Data", "Error", JOptionPane.WARNING_MESSAGE);
         } else {
-            int a = Integer.parseInt(harga.getText());
-            int b = Integer.parseInt(jumbar.getText());
-            int total = Integer.parseInt(tot.getText());
-            int hasil = (a*b)+total;
-            String ab = Integer.toString(hasil);
-            
             String SQL = "UPDATE tabel_barang SET `id_barang`='"+idbar.getText()
                     +"',`nama_barang`='"+nama.getText()
                     +"',`harga_barang`='"+harga.getText()
@@ -350,7 +359,7 @@ public class frmMain extends javax.swing.JFrame {
             int status = KoneksiDB.execute(SQL);
             if (status == 1) {
                 JOptionPane.showMessageDialog(this, "Data berhasil diupdate","Sukses",JOptionPane.INFORMATION_MESSAGE);
-                selectData();
+                selectData(); tot.setText(ab);
             } else {
                 JOptionPane.showMessageDialog(this, "Data gagal diupdate", "Gagal", JOptionPane.WARNING_MESSAGE);
             }
@@ -388,12 +397,27 @@ public class frmMain extends javax.swing.JFrame {
             harga.setText(tabel.getValueAt(baris, 2).toString());
             jumbar.setText(tabel.getValueAt(baris, 3).toString());
             
+            int teks = Integer.parseInt(tot.getText());
+            int tab = Integer.parseInt(tabel.getValueAt(baris, 4).toString());
+            int b = teks-tab;
+            String hasil = Integer.toString(b);
+            tot.setText(hasil);
         }
     }//GEN-LAST:event_tabelMouseClicked
 
     private void jumbarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jumbarActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jumbarActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        int disk = 90;
+        int diskon = Integer.parseInt(tot.getText());
+        if(diskon>=100000){
+            int dis = diskon*disk/100;
+            tot.setText(Integer.toString(dis));
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -443,6 +467,7 @@ public class frmMain extends javax.swing.JFrame {
     private javax.swing.JTextField harga;
     private javax.swing.JTextField idbar;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
